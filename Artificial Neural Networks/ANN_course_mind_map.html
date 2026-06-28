@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ANN Course Mind Map</title>
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --ink: #17202a;
+      --muted: #5b6674;
+      --line: #d8dee8;
+      --day1: #1b6b93;
+      --day2: #9a4d0a;
+      --day3: #4d6f1d;
+      --day4: #7d3f98;
+      --supp: #555d69;
+      --card: #ffffff;
+      --accent: #174ea6;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.45;
+    }
+
+    header {
+      padding: 28px 32px 20px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: 22px;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 10px;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 980px;
+    }
+
+    main {
+      padding: 24px 32px 40px;
+    }
+
+    section {
+      margin-bottom: 28px;
+    }
+
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 10px;
+    }
+
+    .legend-item,
+    .node,
+    .source-row,
+    .focus-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+    }
+
+    .legend-item {
+      padding: 10px 12px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .badge {
+      display: inline-flex;
+      min-width: 38px;
+      height: 24px;
+      padding: 0 7px;
+      border-radius: 5px;
+      align-items: center;
+      justify-content: center;
+      background: #e8f0fe;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .mindmap {
+      display: grid;
+      grid-template-columns: 260px repeat(4, minmax(220px, 1fr)) 260px;
+      gap: 14px;
+      align-items: start;
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+
+    .root {
+      background: #17202a;
+      color: #fff;
+      border-radius: 8px;
+      padding: 18px;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .root strong {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .column {
+      display: grid;
+      gap: 12px;
+    }
+
+    .node {
+      padding: 12px;
+      border-top: 4px solid var(--supp);
+    }
+
+    .node.day1 {
+      border-top-color: var(--day1);
+    }
+
+    .node.day2 {
+      border-top-color: var(--day2);
+    }
+
+    .node.day3 {
+      border-top-color: var(--day3);
+    }
+
+    .node.day4 {
+      border-top-color: var(--day4);
+    }
+
+    .node.supp {
+      border-top-color: var(--supp);
+    }
+
+    .file {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+      margin-bottom: 8px;
+    }
+
+    .topics {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .topics li {
+      margin: 6px 0;
+      font-size: 14px;
+    }
+
+    .tags {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      padding: 2px 7px;
+      border-radius: 5px;
+      background: #f1f4f8;
+      color: #394150;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .source-grid,
+    .focus-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .source-row {
+      display: grid;
+      grid-template-columns: 120px minmax(220px, 320px) 1fr minmax(180px, 260px);
+      gap: 12px;
+      padding: 12px;
+      align-items: start;
+    }
+
+    .source-row.header-row {
+      background: #eef2f7;
+      font-weight: 700;
+      box-shadow: none;
+    }
+
+    .source-row div {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .focus-grid {
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .focus-card {
+      padding: 14px;
+    }
+
+    .focus-card strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    @media (max-width: 900px) {
+      header,
+      main {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .mindmap {
+        grid-template-columns: minmax(240px, 1fr);
+      }
+
+      .source-row,
+      .source-row.header-row {
+        grid-template-columns: 1fr;
+      }
+
+      .source-row.header-row {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Artificial Neural Networks Course Mind Map</h1>
+    <p>Day-by-day map of the course folder. Each box shows the source file, the topics found there, and the syllabus coverage codes.</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Syllabus Coverage Legend</h2>
+      <div class="legend">
+        <div class="legend-item"><span class="badge">T1</span><span>Introduction to neural networks</span></div>
+        <div class="legend-item"><span class="badge">T2</span><span>The ANN: perceptron, layers, weights, biases, hyperparameters</span></div>
+        <div class="legend-item"><span class="badge">T3</span><span>Activation and cost functions</span></div>
+        <div class="legend-item"><span class="badge">T4</span><span>Optimization algorithms</span></div>
+        <div class="legend-item"><span class="badge">T5</span><span>Backpropagation</span></div>
+        <div class="legend-item"><span class="badge">T6</span><span>The learning mechanism</span></div>
+        <div class="legend-item"><span class="badge">T7</span><span>Classification and regression</span></div>
+        <div class="legend-item"><span class="badge">P1</span><span>Introduction to PyTorch 2.0</span></div>
+        <div class="legend-item"><span class="badge">P2</span><span>Training and evaluation using PyTorch and TensorBoard</span></div>
+        <div class="legend-item"><span class="badge">P3</span><span>Hyperparameter tuning using Optuna</span></div>
+        <div class="legend-item"><span class="badge">P4</span><span>Real-life case-study regression and classification examples</span></div>
+        <div class="legend-item"><span class="badge">S</span><span>Supplemental or reference content</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Mind Map</h2>
+      <div class="mindmap">
+        <div class="root">
+          <strong>ANN Course</strong>
+          <span>Core theory, PyTorch practice, model evaluation, tuning, and case studies</span>
+        </div>
+
+        <div class="column">
+          <div class="node day1">
+            <h3>Day 1: AI and Neural Network Foundations</h3>
+            <span class="file">day1/ANN_01_introduction_to_artificial_intelligence.pdf</span>
+            <ul class="topics">
+              <li>AI, ML, and deep learning relationship</li>
+              <li>Deep learning applications</li>
+              <li>Machine learning workflow</li>
+            </ul>
+            <div class="tags"><span class="tag">T1</span><span class="tag">T6</span></div>
+          </div>
+
+          <div class="node day1">
+            <h3>Day 1: Understanding Neural Networks</h3>
+            <span class="file">day1/ANN_02_understanding_neural_networks.pdf</span>
+            <ul class="topics">
+              <li>Neuron, perceptron, weights, biases, layers</li>
+              <li>Shallow/deep networks and MLP</li>
+              <li>Activation functions and non-linearity</li>
+              <li>Regression, binary, multiclass, multilabel outputs</li>
+            </ul>
+            <div class="tags"><span class="tag">T1</span><span class="tag">T2</span><span class="tag">T3</span><span class="tag">T7</span></div>
+          </div>
+
+          <div class="node day1">
+            <h3>Day 1: PyTorch Fundamentals</h3>
+            <span class="file">day1/ANN_00_practical.pdf, day1/ann_lab_01_pytorch_fundamentals.ipynb</span>
+            <ul class="topics">
+              <li>PyTorch framework overview</li>
+              <li>Tensors, dtypes, devices, shapes</li>
+              <li>Matrix multiplication, reshaping, indexing, NumPy bridge</li>
+            </ul>
+            <div class="tags"><span class="tag">P1</span></div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="node day2">
+            <h3>Day 2: How Neural Networks Learn</h3>
+            <span class="file">day2/ANN_03_How_neural_networks_learn.pdf</span>
+            <ul class="topics">
+              <li>Preprocessing, encoding, normalization</li>
+              <li>Training cycle: forward, loss, backprop, update</li>
+              <li>MSE, BCE, categorical cross entropy, multilabel loss</li>
+              <li>Gradient descent, learning rate, chain rule</li>
+              <li>Vanishing gradients, dying ReLU</li>
+              <li>Batch GD, SGD, mini-batch, momentum, AdaGrad, RMSProp, Adam</li>
+            </ul>
+            <div class="tags"><span class="tag">T3</span><span class="tag">T4</span><span class="tag">T5</span><span class="tag">T6</span><span class="tag">T7</span></div>
+          </div>
+
+          <div class="node day2">
+            <h3>Day 2: Binary Classification Labs</h3>
+            <span class="file">day2/ann_lab_02_binary_classification_pytorch.ipynb, day2/ann_lab_02_cancer_binary_classification_pyTorch.ipynb</span>
+            <ul class="topics">
+              <li>Bank churn and breast cancer classification</li>
+              <li>Data encoding, splitting, scaling</li>
+              <li>Dataset, DataLoader, BCEWithLogitsLoss, Adam</li>
+              <li>TensorBoard, confusion matrix, classification report, save/load</li>
+            </ul>
+            <div class="tags"><span class="tag">P2</span><span class="tag">P4</span></div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="node day3">
+            <h3>Day 3: Evaluation and Improvement</h3>
+            <span class="file">day3/ANN_04_Model_evaluation_and_improvement.pdf</span>
+            <ul class="topics">
+              <li>Train, validation, test split and stratification</li>
+              <li>Underfitting and overfitting diagnosis</li>
+              <li>Bias-variance trade-off</li>
+              <li>Hyperparameters and tuning approaches</li>
+              <li>L1, L2, dropout, early stopping, data augmentation, batch norm</li>
+              <li>Deep learning benefits, drawbacks, and training challenges</li>
+            </ul>
+            <div class="tags"><span class="tag">T1</span><span class="tag">T2</span><span class="tag">T6</span><span class="tag">P3</span></div>
+          </div>
+
+          <div class="node day3">
+            <h3>Day 3: Regression and Shortcut Lab</h3>
+            <span class="file">day3/ann_lab_03_housing_regression_pytorch.ipynb, day3/ann_lab_02_cancer_bc_shortcut.ipynb</span>
+            <ul class="topics">
+              <li>California housing regression</li>
+              <li>MSELoss, MLP, TensorBoard, test evaluation</li>
+              <li>Compact cancer binary-classification pipeline</li>
+            </ul>
+            <div class="tags"><span class="tag">T7</span><span class="tag">P2</span><span class="tag">P4</span></div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="node day4">
+            <h3>Day 4: Curve Analysis</h3>
+            <span class="file">day4/ANN_exercise_curves.pdf</span>
+            <ul class="topics">
+              <li>Training/validation curve interpretation</li>
+              <li>Underfitting vs overfitting decisions</li>
+              <li>Gradient-function identification</li>
+            </ul>
+            <div class="tags"><span class="tag">T3</span><span class="tag">T5</span><span class="tag">T6</span></div>
+          </div>
+
+          <div class="node day4">
+            <h3>Day 4: Activations, Initialization, Optimizers</h3>
+            <span class="file">day4/Activation_Functions.ipynb.txt, day4/Optimization_and_Initialization.ipynb.txt</span>
+            <ul class="topics">
+              <li>Gradient flow through activation functions</li>
+              <li>Sigmoid/tanh saturation and ReLU-family behavior</li>
+              <li>Xavier/Glorot and Kaiming/He initialization</li>
+              <li>SGD, SGD with momentum, Adam</li>
+            </ul>
+            <div class="tags"><span class="tag">T3</span><span class="tag">T4</span><span class="tag">T5</span><span class="tag">T6</span></div>
+          </div>
+
+          <div class="node day4">
+            <h3>Day 4: Regularization and Tuning Labs</h3>
+            <span class="file">day4/ann_lab_04_cancer_tuning_regularization_pytorch.ipynb, day4/ann_lab_05_MNIST_tuning_regularization_pytorch.ipynb</span>
+            <ul class="topics">
+              <li>Batch norm, dropout, L2, combined regularization</li>
+              <li>Optuna hyperparameter tuning</li>
+              <li>MNIST multiclass classification and misclassified examples</li>
+            </ul>
+            <div class="tags"><span class="tag">T6</span><span class="tag">T7</span><span class="tag">P2</span><span class="tag">P3</span><span class="tag">P4</span></div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="node supp">
+            <h3>Supplemental and Corrections</h3>
+            <span class="file">AI_Russell_Norvig.pdf, ANN_practical.pdf, ann_mnist_correction.pdf, bank_churn_classification_corrected.pdf, rest.pdf</span>
+            <ul class="topics">
+              <li>Russell and Norvig: general AI reference</li>
+              <li>TensorFlow 2 and Keras introduction</li>
+              <li>MNIST and bank churn corrected exercises</li>
+              <li>rest.pdf: no extractable text in quick inventory</li>
+            </ul>
+            <div class="tags"><span class="tag">S</span><span class="tag">T1</span><span class="tag">P4</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Detailed Source Map</h2>
+      <div class="source-grid">
+        <div class="source-row header-row">
+          <div>Day / unit</div>
+          <div>File</div>
+          <div>Topics found</div>
+          <div>Syllabus coverage</div>
+        </div>
+        <div class="source-row"><div>Day 1</div><div>ANN_01_introduction_to_artificial_intelligence.pdf</div><div>AI, ML, deep learning, applications, ML workflow</div><div>T1, T6</div></div>
+        <div class="source-row"><div>Day 1</div><div>ANN_02_understanding_neural_networks.pdf</div><div>Neuron, perceptron, layers, weights, biases, MLP, activations, output/task types</div><div>T1, T2, T3, T7</div></div>
+        <div class="source-row"><div>Day 1</div><div>ANN_00_practical.pdf; ann_lab_01_pytorch_fundamentals.ipynb</div><div>PyTorch, tensors, dtypes, shapes, operations, NumPy bridge</div><div>P1</div></div>
+        <div class="source-row"><div>Day 2</div><div>ANN_03_How_neural_networks_learn.pdf</div><div>Preprocessing, losses, gradient descent, backpropagation, optimizers</div><div>T3, T4, T5, T6, T7</div></div>
+        <div class="source-row"><div>Day 2 labs</div><div>binary classification and cancer classification notebooks</div><div>Encoding, scaling, DataLoader, BCEWithLogitsLoss, Adam, TensorBoard, evaluation</div><div>P2, P4</div></div>
+        <div class="source-row"><div>Day 3</div><div>ANN_04_Model_evaluation_and_improvement.pdf</div><div>Splitting, under/overfitting, bias-variance, tuning, regularization, deep learning challenges</div><div>T1, T2, T6, P3</div></div>
+        <div class="source-row"><div>Day 3 labs</div><div>housing regression and cancer shortcut notebooks</div><div>Regression, MSELoss, TensorBoard, test evaluation, compact classification pipeline</div><div>T7, P2, P4</div></div>
+        <div class="source-row"><div>Day 4</div><div>ANN_exercise_curves.pdf</div><div>Curve diagnosis, under/overfitting fixes, gradient shapes</div><div>T3, T5, T6</div></div>
+        <div class="source-row"><div>Day 4</div><div>Activation_Functions.ipynb.txt; Optimization_and_Initialization.ipynb.txt</div><div>Activation gradient flow, saturation, initialization, SGD, momentum, Adam</div><div>T3, T4, T5, T6</div></div>
+        <div class="source-row"><div>Day 4 labs</div><div>regularization/tuning cancer lab; MNIST tuning lab</div><div>Batch norm, dropout, L2, Optuna, CrossEntropyLoss, multiclass evaluation</div><div>T6, T7, P2, P3, P4</div></div>
+        <div class="source-row"><div>Supplemental</div><div>AI_Russell_Norvig.pdf; ANN_practical.pdf; corrections; rest.pdf</div><div>General AI reference, TensorFlow/Keras intro, corrected exercises, no-text supplemental PDF</div><div>S, T1, P4</div></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Exam Focus Branches</h2>
+      <div class="focus-grid">
+        <div class="focus-card"><strong>Task, output, loss mapping</strong><span>Study ANN_02, ANN_03, and the day 2-4 labs. Watch for sigmoid/softmax vs logits traps.</span></div>
+        <div class="focus-card"><strong>Training loop</strong><span>Study ANN_03 and the binary classification labs. Know forward, loss, zero_grad, backward, step.</span></div>
+        <div class="focus-card"><strong>Underfitting and overfitting</strong><span>Study ANN_04 and ANN_exercise_curves. Curve interpretation is likely MCQ material.</span></div>
+        <div class="focus-card"><strong>Regularization</strong><span>Study ANN_04 and day 4 labs. Compare L1, L2, dropout, early stopping, batch norm.</span></div>
+        <div class="focus-card"><strong>Optimizers and gradients</strong><span>Study ANN_03 and Optimization_and_Initialization. Know learning rate, momentum, Adam, vanishing gradients, initialization.</span></div>
+        <div class="focus-card"><strong>PyTorch mechanics</strong><span>Study ANN_00 and labs. Know tensors, DataLoader, nn.Module, train/eval mode, TensorBoard, Optuna.</span></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
